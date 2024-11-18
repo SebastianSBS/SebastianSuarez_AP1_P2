@@ -1,7 +1,10 @@
-﻿namespace SebastianSuarez_AP1_P2.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SebastianSuarez_AP1_P2.Models
 {
     public class Combos
     {
+        [Key]
         public int ComboId { get; set; }
         public DateTime Fecha { get; set; }
         public string Descripcion { get; set; }
