@@ -15,9 +15,10 @@ namespace SebastianSuarez_AP1_P2.DAL
             modelBuilder.Entity<Combos>().
             HasData(new List<Combos>() {
          new Combos(){ComboId=1, Descripcion= "Gama alta", Precio= 11400},
-         new Combos(){ComboId=2, Descripcion= "Gama media", Precio= 9750},
-         new Combos(){ComboId=3, Descripcion= "Gama baja", Precio= 4600}
-
+         new Combos(){ComboId=2, Descripcion= "Gama media-alta", Precio= 10000},
+         new Combos(){ComboId=3, Descripcion= "Gama media", Precio= 9750},
+         new Combos(){ComboId=4, Descripcion="Gama media-baja", Precio= 7200},
+         new Combos(){ComboId=5, Descripcion= "Gama baja", Precio= 4600}
             });
         }
 
