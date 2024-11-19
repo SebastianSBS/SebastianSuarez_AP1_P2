@@ -21,7 +21,5 @@ namespace SebastianSuarez_AP1_P2.DAL
          new Combos(){ComboId=5, Descripcion= "Gama baja", Precio= 4600}
             });
         }
-
-
     }
 }
