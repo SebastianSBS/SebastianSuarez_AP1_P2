@@ -28,9 +28,6 @@
                     <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
                         <span class="bi bi-search"></span> Buscar
                     </button>
-                    <button @onclick="Notificacion" class="btn btn-outline-primary" type="button">
-                        <span class="bi bi-search"></span> Notificame
-                    </button>
                 </div>
             </div>
             <div class="col-md-3 text-end">
@@ -119,10 +116,5 @@
         {
             ListaCombos = await comboServices.Listar(t => true);
         }
-    }
-
-    private void Notificacion()
-    {
-    notifications.Notify(new(ToastType.Danger,"Notificacion de prueba "));
     }
 }
