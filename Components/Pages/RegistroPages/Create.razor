@@ -1,7 +1,9 @@
 ﻿@page "/Create"
 @inject ComboServices comboService
-
 @rendermode InteractiveServer
+@inject ToastService notifications
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
 
 <EditForm Model="combos" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
@@ -134,6 +136,7 @@
 
     public void Nuevo()
     {
+        notifications.Notify(new(ToastType.Info, "Se ha restaurado los valores de fabrica"));
         combos = new Combos();
         Existe = false;
     }
@@ -142,6 +145,7 @@
     {
         combos.ComboDetalle = Lista_CombosDetalle;
         var guardo = await comboService.Guardar(combos);
+        notifications.Notify(new(ToastType.Success, "Guardando exitoso.."));
         if (guardo)
         {
             Nuevo();
@@ -183,4 +187,10 @@
         combosDetalle.Costo = detalleRemover.Costo;
 
     }
+
+    private void Notificacion()
+    {
+        notifications.Notify(new(ToastType.Danger, "Notificacion de prueba "));
+    }
+
 }

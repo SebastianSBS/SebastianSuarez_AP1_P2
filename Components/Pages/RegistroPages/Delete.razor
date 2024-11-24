@@ -2,8 +2,10 @@
 @page "/Delete/{ComboId:int}"
 @inject ComboServices comboService
 @inject NavigationManager navigationManager
-
 @rendermode InteractiveServer
+@inject ToastService notifications
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
 
 <PageTitle>Eliminar Combo</PageTitle>
 
@@ -83,7 +85,7 @@ else
         {
             return;
         }
-
+        notifications.Notify(new(ToastType.Danger, "Eliminado satisfactorio"));
         if (await comboService.Eliminar(ComboId))
         {
             Volver();
@@ -93,6 +95,11 @@ else
     public void Volver()
     {
         navigationManager.NavigateTo("/Index");
+    }
+
+    private void Notificacion()
+    {
+        notifications.Notify(new(ToastType.Danger, "Notificacion de prueba "));
     }
 }
 
