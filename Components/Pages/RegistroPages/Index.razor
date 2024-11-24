@@ -1,0 +1,128 @@
+﻿@page "/Index"
+@rendermode InteractiveServer
+@inject ComboServices comboServices
+@inject ToastService notifications
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<EditForm Model="ListaCombos" class="border shadow-lg p-3 rounded">
+
+    <div class="card-header bg-primary text-white text-center py-2 rounded">
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta Combo</h3>
+    </div>
+    <div class="card-body">        
+
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label">Filtrar por:</label>
+                <select @bind="filtro" class="form-select">
+                    <option value="id">ID</option>
+                    <option value="descripcion">Descripcion</option>
+                    <option value="precio">Precio</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label">Busqueda:</label>
+                <div class="input-group">
+                    <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <span class="bi bi-search"></span> Buscar
+                    </button>
+                    <button @onclick="Notificacion" class="btn btn-outline-primary" type="button">
+                        <span class="bi bi-search"></span> Notificame
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3 text-end">
+                <a href="/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
+            </div>
+
+        </div>
+    </div>
+    <table class="table table-bordered text-center">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>ID de Combo</th>
+                <th>Decripcion</th>
+                <th>Precio</th>
+                <th>Detalle</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var registro in ListaCombos)
+            {              
+                <tr>
+                    <td>@registro.ComboId</td>
+                    <td>@registro.Descripcion</td>
+                    <td>@registro.Precio</td>
+
+                    <td>
+                        <a class="btn btn-outline-primary" href="/Details/@registro.ComboId">
+                            <span class="bi bi-card-heading fs-5"></span>
+                        </a>
+                    </td>
+
+                    <td>
+                        <a class="btn btn-outline-success" href="/Edit/@registro.ComboId">
+                            <span class="bi bi-pencil fs-5"></span>
+                        </a>
+                    </td>
+
+                    <td>
+                        <a class="btn btn-outline-danger" href="/Delete/@registro.ComboId">
+                            <span class="bi bi-trash fs-5"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</EditForm>
+@code {
+    public Combos Combo = new Combos();
+
+    public List<Combos> ListaCombos = new List<Combos>();
+
+    private string filtro { get; set; } = "Id";
+    private string valorFiltro { get; set; } = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaCombos = await comboServices.Listar(t => true);
+    }
+
+    public async Task Guardar()
+    {
+        var guardo = await comboServices.Guardar(Combo);
+    }
+
+    private async Task Buscar()
+    {
+        if (valorFiltro.Trim() != "")
+        {
+            if (filtro == "id" && int.TryParse(valorFiltro, out int ComboId))
+            {
+                ListaCombos = await comboServices.Listar(t => t.ComboId == ComboId);
+            }
+            else if (filtro == "descripcion")
+            {
+                ListaCombos = await comboServices.Listar(t => t.Descripcion == valorFiltro);
+            }
+            else if (filtro == "precio" && int.TryParse(valorFiltro, out int Precio))
+            {
+                ListaCombos = await comboServices.Listar(t => t.Precio == Precio);
+            }
+        }
+        else
+        {
+            ListaCombos = await comboServices.Listar(t => true);
+        }
+    }
+
+    private void Notificacion()
+    {
+    notifications.Notify(new(ToastType.Danger,"Notificacion de prueba "));
+    }
+}
