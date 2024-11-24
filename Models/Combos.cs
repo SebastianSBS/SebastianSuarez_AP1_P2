@@ -1,11 +1,19 @@
-﻿namespace SebastianSuarez_AP1_P2.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SebastianSuarez_AP1_P2.Models
 {
     public class Combos
     {
+        [Key]
         public int ComboId { get; set; }
-        public DateTime Fecha { get; set; }
+        [Required(ErrorMessage = "Es necesario el campo Descripcion")]
         public string Descripcion { get; set; }
-        public int Precio { get; set; }  
-        public int Vendido { get; set; }
+        public DateTime Fecha { get; set; }
+
+        public int Precio { get; set; }
+
+        public bool Vendido { get; set; }
+
+        public ICollection<CombosDetalle> ComboDetalle { get; set; } = new List<CombosDetalle>();
     }
 }
