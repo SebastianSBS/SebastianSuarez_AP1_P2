@@ -1,0 +1,71 @@
+﻿@page "/Details"
+@page "/Details/{ComboId:int}"
+@inject ComboServices comboService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+@inject ToastService notifications
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<PageTitle>Detalles del combo</PageTitle>
+
+@if (combos != null)
+{
+    <div class="container">
+        <div class="card shadow-header">
+            <div class="card-header  bg-primary text-white text-center py-2 rounded">
+                <h3 class="text-center"><strong>Detalles del combo</strong></h3>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>ComboId:</strong> @combos.ComboId</li>
+                                <li><strong>Fecha:</strong> @combos.Fecha</li>
+                                <li><strong>Descripcion:</strong> @combos.Descripcion</li>
+                                @foreach (var detalle in Lista_CombosDetalles)
+                                {
+                                    <li><strong>Articulo: </strong>@detalle.Articulos.Descripcion</li>
+                                }
+                                <li><strong>Monto total:</strong> @combos.Precio</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>No se halló el trabajo.</p>
+}
+
+@code {
+    [Parameter]
+    public int ComboId { get; set; }
+    public Combos? combos { get; set; } = new Combos();
+    public List<CombosDetalle> Lista_CombosDetalles { get; set; } = new List<CombosDetalle>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        combos = await comboService.Buscar(ComboId);
+        //Lista_CombosDetalles = await registroComboService.BuscarTrabajoDetalle(ComboId);
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Index");
+    }
+
+    private void Notificacion()
+    {
+        notifications.Notify(new(ToastType.Danger, "Prueba"));
+    }
+}
+
